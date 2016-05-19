@@ -1,0 +1,12 @@
+{
+  "name": "selfbot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "author": "Aaron Scherer <aequasi@gmail.com> (http://aaronscherer.me)",
+  "dependencies": {
+    "chalk": "^1.1.3",
+    "eris": "abalabahaha/Eris#master",
+    "lodash": "^4.12.0"
+  }
+}

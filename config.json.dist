@@ -1,0 +1,12 @@
+{
+    "token":      "user-token",
+    "client":     {
+        "options": {
+            "getAllUsers": true,
+            "maxShards":   1
+        }
+    },
+    "admin":      "user-id",
+    "prefix":     ">",
+    "config_dir": "./config"
+}
