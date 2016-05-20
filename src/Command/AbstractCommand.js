@@ -1,4 +1,11 @@
+const Eris    = require('eris'),
+      Channel = Eris.prototype.Channel,
+      User    = Eris.prototype.User,
+      Member  = Eris.prototype.Member;
+
 class AbstractCommand {
+    get prefixed() { return true; }
+
     constructor(bot) {
         this.bot = bot;
     }
@@ -15,8 +22,37 @@ class AbstractCommand {
         return this.bot.managers.find(manager => manager.guild.id === message.channel.guild.id);
     }
 
-    createMessage(channel, content) {
-        return this.bot.client.createMessage(channel.id, '< ' + content);
+    createMessage(destination, content, prefix) {
+        if (prefix === undefined) {
+            prefix = '<>';
+        }
+
+        if (prefix !== '') {
+            content = prefix + ' ' + content;
+        }
+
+        if (destination instanceof Channel) {
+            return this.bot.client.createMessage(destination.id, content);
+        }
+
+        if (destination instanceof Member) {
+            return this.createMessage(destination.member, content, prefix)
+        }
+
+        if (destination instanceof User) {
+            return new Promise((resolve, reject) => {
+                this.bot.client.getDMChannel(destination.id).then(channel => {
+                    this.createMessage(channel, content, prefix).then(resolve).catch(reject);
+                }).catch(reject);
+            });
+        }
+
+        throw new Error("Invalid destination.");
+    }
+
+    reply(message, content, prefix) {
+        console.log(message.channel);
+        this.createMessage(this.isPrivate(message) ? message.author : message.channel, content, prefix)
     }
 
     deleteMessage(message) {

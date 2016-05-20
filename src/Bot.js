@@ -11,6 +11,7 @@ class Bot {
             new (require('./Command/GetTagsCommand'))(this),
             new (require('./Command/GetTagCommand'))(this),
             new (require('./Command/SetTagCommand'))(this),
+            new (require('./Command/AyyCommand'))(this),
             new (require('./Command/EvalCommand'))(this)
         ];
 
@@ -39,8 +40,8 @@ class Bot {
                         : "") + (msg.channel.guild || {name: "DM"}).name + " <#" + msg.channel.name + "> " + msg.author.username + ": " + msg.content);
 
                 for (let command of this.commands) {
-                    if (msg.content.indexOf(this.config.prefix) !== 0) {
-                        return;
+                    if (command.prefixed && msg.content.indexOf(this.config.prefix) !== 0) {
+                        continue;
                     }
 
                     let message = msg.content.replace(this.config.prefix, ''),
