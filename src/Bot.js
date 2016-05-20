@@ -7,13 +7,27 @@ class Bot {
     constructor() {
         this.config = JSON.parse(fs.readFileSync(process.argv[2], 'utf8'));
 
-        this.commands = [
+        let commands = [
             new (require('./Command/GetTagsCommand'))(this),
             new (require('./Command/GetTagCommand'))(this),
             new (require('./Command/SetTagCommand'))(this),
             new (require('./Command/AyyCommand'))(this),
             new (require('./Command/EvalCommand'))(this)
         ];
+
+        this.commands = [];
+        for (let index in commands) {
+            if (!commands.hasOwnProperty(index)) {
+                continue;
+            }
+
+            let name = commands[index].constructor.name;
+            if (this.config.disabled_commands.indexOf(name) >= 0) {
+                continue;
+            }
+
+            this.commands.push(commands[index]);
+        }
 
         let startTime = 0;
         this.managers = [];

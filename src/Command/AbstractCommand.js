@@ -22,13 +22,13 @@ class AbstractCommand {
         return this.bot.managers.find(manager => manager.guild.id === message.channel.guild.id);
     }
 
-    createMessage(destination, content, prefix) {
-        if (prefix === undefined) {
-            prefix = '<>';
+    createMessage(destination, content, noPrefix) {
+        if (noPrefix === undefined) {
+            noPrefix = false;
         }
 
-        if (prefix !== '') {
-            content = prefix + ' ' + content;
+        if (noPrefix === false) {
+            content = this.bot.config.response_prefix + ' ' + content;
         }
 
         if (destination instanceof Channel) {
